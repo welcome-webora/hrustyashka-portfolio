@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Демонстрационный сайт — портфолио WEBORA</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff8f0;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: #ffb347;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 3rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+      gap: 2%;
+    }
+
+    .product {
+      background: #fff3e0;
+      border-radius: 1rem;
+      padding: 1rem;
+      width: 32%;
+      min-width: 200px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .product img {
+      width: 100%;
+      border-radius: 1rem;
+      cursor: pointer;
+    }
+
+    .product h3 {
+      margin: 0.5rem 0 0.2rem 0;
+    }
+
+    .product p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .price {
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .controls button {
+      background: #ff7f50;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 1rem;
+    }
+
+    .controls button:hover {
+      background: #ff5722;
+    }
+
+    .cart-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff7f50;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    #cart-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    #cart-content {
+      background: #fff8f0;
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    #cart-modal.show #cart-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #cart-content h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #ff7f50;
+    }
+
+    #cart-content ul {
+      list-style: none;
+      padding: 0;
+      max-height: 120px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    #cart-content li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    #cart-content input, #cart-content select {
+      width: 100%;
+      padding: 0.6rem;
+      margin: 0.5rem 0;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+    }
+
+    #cart-content button[type="submit"] {
+      width: 100%;
+      padding: 0.7rem;
+      background: #ff7f50;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s ease;
+    }
+
+    #cart-content button[type="submit"]:hover {
+      background: #ff5722;
+    }
+
+    #close-cart {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
+    }
+
+    footer {
+      padding: 2rem 2rem 10rem 2rem;
+      text-align: center;
+      color: #333;
+      font-style: italic;
+      background: #fff3e0;
+    }
+
+    /* адаптивность */
+    @media (max-width: 768px) {
+      .product { width: 48%; }
+    }
+
+    @media (max-width: 480px) {
+      .product { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Хрустяшка</h1>
+  <p>Горячая выпечка с доставкой прямо к вашему столу!</p>
+  <p>По Москве и МО</p>
+</header>
+
+<div class="products" id="products">
+  <!-- Товары -->
+  <div class="product" data-name="Круассан с шоколадом" data-price="100">
+    <img src="кру.jpg" alt="Круассан с шоколадом">
+    <h3>Круассан с шоколадом</h3>
+    <p>Слоёное тесто, шоколадная начинка</p>
+    <p class="price">100 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Пирожок с мясом" data-price="90">
+    <img src="пиро.jpg" alt="Пирожок с мясом">
+    <h3>Пирожок с мясом</h3>
+    <p>Дрожжевое тесто, мясной фарш</p>
+    <p class="price">90 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Булочка с корицей" data-price="100">
+    <img src="бул.jpg" alt="Булочка с корицей">
+    <h3>Булочка с корицей</h3>
+    <p>Дрожжевое тесто, корица, сахарная глазурь</p>
+    <p class="price">100 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Круассан с миндальным кремом" data-price="130">
+    <img src="крумин.jpg" alt="Круассан с миндальным кремом">
+    <h3>Круассан с миндальным кремом</h3>
+    <p>Воздушное тесто, миндальная паста</p>
+    <p class="price">130 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Яблочный штрудель" data-price="130">
+    <img src="штр.jpg" alt="Яблочный штрудель">
+    <h3>Яблочный штрудель</h3>
+    <p>Слоёное тесто, яблоки, корица</p>
+    <p class="price">130 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Слойка с творогом" data-price="100">
+    <img src="сло.jpg" alt="Слойка с творогом">
+    <h3>Слойка с творогом</h3>
+    <p>Слоёное тесто, сладкий творог</p>
+    <p class="price">100 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Пирожок с картошкой и грибами" data-price="110">
+    <img src="пирожок.jpg" alt="Пирожок с картошкой и грибами">
+    <h3>Пирожок с картошкой и грибами</h3>
+    <p>Домашнее дрожжевое тесто</p>
+    <p class="price">110 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Маффин ванильный" data-price="90">
+    <img src="маф.jpg" alt="Маффин ванильный">
+    <h3>Маффин ванильный</h3>
+    <p>Порционная сладкая выпечка</p>
+    <p class="price">90 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+
+  <div class="product" data-name="Синнабон" data-price="180">
+    <img src="син.jpg" alt="Синнабон">
+    <h3>Синнабон (булочка с корицей и крем-сыром)</h3>
+    <p>Сливочная глазурь, нежное тесто</p>
+    <p class="price">180 ₽</p>
+    <div class="controls"><button class="minus">-</button><span class="count">0</span><button class="plus">+</button></div>
+  </div>
+</div>
+
+<button class="cart-btn" id="show-cart">Заказать</button>
+
+<div id="cart-modal">
+  <div id="cart-content">
+    <span id="close-cart">&times;</span>
+    <h2>Ваш заказ</h2>
+    <ul id="cart-list"></ul>
+    <p>Доставка: 200 ₽</p>
+    <p>Общая стоимость: <span id="total">0</span> ₽</p>
+
+    <!-- Форма -->
+    <form id="order-form" action="https://formspree.io/f/xzzjvzad" method="POST">
+      <input type="text" name="address" id="address" placeholder="Введите адрес доставки" required>
+      <input type="tel" name="phone" id="phone" placeholder="Введите телефон" required>
+
+      <label for="payment">Форма оплаты:</label>
+      <select name="payment" id="payment" required>
+        <option value="">Выберите</option>
+        <option value="Картой">Картой</option>
+        <option value="Наличными">Наличными</option>
+      </select>
+
+      <input type="text" name="promo" id="promo" placeholder="Промокод (если есть)">
+      <input type="hidden" name="order" id="order-hidden">
+
+      <button type="submit">Отправить заказ</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const DELIVERY_PRICE = 200;
+  const cart = {};
+  const cartList = document.getElementById('cart-list');
+  const totalEl = document.getElementById('total');
+  const showCartBtn = document.getElementById('show-cart');
+  const cartModal = document.getElementById('cart-modal');
+  const closeCart = document.getElementById('close-cart');
+  const orderForm = document.getElementById('order-form');
+  const orderHidden = document.getElementById('order-hidden');
+
+  function updateCart() {
+    cartList.innerHTML = '';
+    let total = 0;
+
+    Object.keys(cart).forEach(name => {
+      const item = cart[name];
+      total += item.price * item.count;
+
+      const li = document.createElement('li');
+      li.innerHTML = `
+        ${item.name} - ${item.price * item.count} ₽
+        <div class="cart-controls">
+          <button onclick="changeCount('${name}', -1)">-</button>
+          <span>${item.count}</span>
+          <button onclick="changeCount('${name}', 1)">+</button>
+        </div>`;
+      cartList.appendChild(li);
+    });
+
+    totalEl.textContent = total + DELIVERY_PRICE;
+  }
+
+  function changeCount(name, delta) {
+    if (!cart[name]) return;
+    cart[name].count += delta;
+    if (cart[name].count <= 0) delete cart[name];
+    updateCart();
+  }
+
+  document.querySelectorAll('.product').forEach(productEl => {
+    const name = productEl.dataset.name;
+    const price = parseInt(productEl.dataset.price);
+    const minusBtn = productEl.querySelector('.minus');
+    const plusBtn = productEl.querySelector('.plus');
+    const countEl = productEl.querySelector('.count');
+    let count = 0;
+
+    plusBtn.addEventListener('click', () => {
+      count++;
+      countEl.textContent = count;
+      cart[name] = {name, price, count};
+      updateCart();
+    });
+
+    minusBtn.addEventListener('click', () => {
+      if (count > 0) {
+        count--;
+        countEl.textContent = count;
+        if (count === 0) delete cart[name];
+        else cart[name].count = count;
+        updateCart();
+      }
+    });
+  });
+
+  showCartBtn.addEventListener('click', () => {
+    cartModal.style.display = 'flex';
+    setTimeout(() => cartModal.classList.add('show'), 10);
+  });
+
+  closeCart.addEventListener('click', () => {
+    cartModal.classList.remove('show');
+    setTimeout(() => cartModal.style.display = 'none', 300);
+  });
+
+  // Перед отправкой формы собрать список товаров
+  orderForm.addEventListener('submit', (e) => {
+    const items = Object.keys(cart).map(name => `${name} x${cart[name].count}`).join(', ');
+    orderHidden.value = items + ` | Доставка: 200 ₽ | Итого: ${totalEl.textContent} ₽`;
+  });
+</script>
+
+<footer>
+  <p>Мы печём с любовью и вниманием к каждой детали. Натуральные ингредиенты и аромат свежей выпечки делают каждый день уютнее. Наши сладости и хлеб всегда можно получить с доставкой по Москве и области.</p>
+  <p style="margin-top:1rem;">С заботой о вас, <strong>Хрустяшка</strong></p>
+</footer>
+</body>
+</html>
